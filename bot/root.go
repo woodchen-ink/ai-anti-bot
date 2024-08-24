@@ -2,9 +2,10 @@ package bot
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/spf13/viper"
 	tb "gopkg.in/telebot.v3"
-	"time"
 )
 
 var (
@@ -50,7 +51,7 @@ func RegisterCommands() {
 
 func RegisterHandle() {
 	Bot.Handle(StartCmd, func(c tb.Context) error {
-		return c.Send("🙋hi,I am an AI anti-advertising robot. My father is Assimon. github.com/assimon/ai-anti-bot")
+		return c.Send("🙋hi,I am an AI anti-advertising robot.")
 	}, PreCmdMiddleware)
 	creatorOnly := Bot.Group()
 	creatorOnly.Use(CreatorCmdMiddleware)
