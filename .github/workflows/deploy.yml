@@ -35,20 +35,16 @@ jobs:
           username: root
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-              # 解压文件
+              echo "开始解压..."
               unzip -o /tmp/deployment.zip -d /opt/1panel/docker/compose/anti-advertising-telegram-bot-deploy
-    
-              # 移动文件，采用覆盖模式
-              mv -f /opt/1panel/docker/compose/anti-advertising-telegram-bot-deploy/* /opt/1panel/docker/compose/anti-advertising-telegram-bot/
-    
-              # 删除 index2 文件夹
+
+              echo "开始移动文件..."
+              rsync -av --delete /opt/1panel/docker/compose/anti-advertising-telegram-bot-deploy/ /opt/1panel/docker/compose/anti-advertising-telegram-bot/
+
+              echo "清理临时文件..."
               rm -rf /opt/1panel/docker/compose/anti-advertising-telegram-bot-deploy
-    
-              # 清理临时文件
               rm /tmp/deployment.zip
 
-              # 停止原镜像
-              docker compose down
-
-              # 构建镜像并运行
+              echo "重启 Docker 容器..."
+              docker compose -f /opt/1panel/docker/compose/anti-advertising-telegram-bot/docker-compose.yml down
               docker compose -f /opt/1panel/docker/compose/anti-advertising-telegram-bot/docker-compose.yml up -d
