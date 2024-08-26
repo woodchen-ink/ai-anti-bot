@@ -46,13 +46,39 @@ func RegisterCommands() {
 			Text:        StartCmd,
 			Description: "Hello🙌",
 		},
+		{
+			Text:        AddAdCmd,
+			Description: "添加广告",
+		},
+		{
+			Text:        AllAdCmd,
+			Description: "查看广告",
+		},
+		{
+			Text:        DelAdCmd,
+			Description: "删除广告",
+		},
 	})
 }
 
 func RegisterHandle() {
 	Bot.Handle(StartCmd, func(c tb.Context) error {
-		return c.Send("🙋hi,I am an AI anti-advertising robot.")
+		// 发送消息并检查错误
+		msg, err := Bot.Send(c.Chat(), "🙋 欢迎进群, 我是防广告机器人, 请勿发送广告, 昵称也不要带有推广信息, 谢谢. 重要信息已置顶, 请留意查看.")
+		if err != nil {
+			return err
+		}
+
+		// 设置定时器，30秒后删除消息
+		time.AfterFunc(30*time.Second, func() {
+			if err := Bot.Delete(msg); err != nil {
+				fmt.Println("Error deleting the message:", err)
+			}
+		})
+
+		return nil
 	}, PreCmdMiddleware)
+
 	creatorOnly := Bot.Group()
 	creatorOnly.Use(CreatorCmdMiddleware)
 	creatorOnly.Handle(AllAdCmd, AllAd)
