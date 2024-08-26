@@ -47,5 +47,8 @@ jobs:
               # 清理临时文件
               rm /tmp/deployment.zip
 
+              # 停止原镜像
+              docker compose down
+
               # 构建镜像并运行
-              docker-compose -f /opt/1panel/docker/compose/anti-advertising-telegram-bot/docker-compose.yml up -d
+              docker compose -f /opt/1panel/docker/compose/anti-advertising-telegram-bot/docker-compose.yml up -d
