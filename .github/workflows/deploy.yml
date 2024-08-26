@@ -35,16 +35,17 @@ jobs:
           username: root
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-              echo "开始解压..."
-              unzip -o /tmp/deployment.zip -d /opt/1panel/docker/compose/anti-advertising-telegram-bot-deploy
+            echo "解压文件中..."
+            unzip -o /tmp/deployment.zip -d /opt/1panel/docker/compose/anti-advertising-telegram-bot-deploy
 
-              echo "开始移动文件..."
-              rsync -av --delete /opt/1panel/docker/compose/anti-advertising-telegram-bot-deploy/ /opt/1panel/docker/compose/anti-advertising-telegram-bot/
+            echo "同步文件到目标目录，排除 data 目录..."
+            rsync -av --delete --exclude 'data' /opt/1panel/docker/compose/anti-advertising-telegram-bot-deploy/ /opt/1panel/docker/compose/anti-advertising-telegram-bot/
 
-              echo "清理临时文件..."
-              rm -rf /opt/1panel/docker/compose/anti-advertising-telegram-bot-deploy
-              rm /tmp/deployment.zip
+            echo "清理临时文件..."
+            rm -rf /opt/1panel/docker/compose/anti-advertising-telegram-bot-deploy
+            rm /tmp/deployment.zip
 
-              echo "重启 Docker 容器..."
-              docker compose -f /opt/1panel/docker/compose/anti-advertising-telegram-bot/docker-compose.yml down
-              docker compose -f /opt/1panel/docker/compose/anti-advertising-telegram-bot/docker-compose.yml up -d
+            echo "重启 Docker 容器..."
+            docker compose -f /opt/1panel/docker/compose/anti-advertising-telegram-bot/docker-compose.yml down
+            docker compose -f /opt/1panel/docker/compose/anti-advertising-telegram-bot/docker-compose.yml up -d
+
