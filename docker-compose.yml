@@ -1,8 +1,10 @@
-version: "3.5"
 services:
   anti-advertising-telegram-bot:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: anti-advertising-telegram-bot:latest
     container_name: anti-advertising-telegram-bot
-    image: woodchen/anti-advertising-telegram-bot:latest
     restart: always
     volumes:
       - ./data:/app/data
